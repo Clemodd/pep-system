@@ -1,0 +1,223 @@
+<form class="joueur-sheet" autocomplete="off">
+
+    <header class="header">
+        <div class="img-conteneur">
+            <img class="profile-img" src="{{actor.img}}" data-edit="img" alt="{{actor.name}}">
+        </div>
+
+        <!-- Nom & Rôle -->
+        <label class="nom-conteneur">
+            <input class="input-actor-nom" type="text" name="name" value="{{actor.name}}"
+                placeholder="{{localize 'system.attributes.nom'}}" />
+            <input class="input-actor-role" type="text" name="system.role" value="{{system.role}}"
+                placeholder="{{localize 'system.attributes.role'}}" />
+        </label>
+
+        <!-- XP -->
+        <div class="xp-conteneur">
+            <label class="xp-label">XP</label>
+            <div class="xp-cercle">
+                <input class="xp-input" type="number" name="system.experience.value" value="{{system.experience.value}}"
+                    min="{{system.experience.min}}" max="{{system.experience.max}}" />
+            </div>
+        </div>
+
+        <!-- Armure -->
+        <span class="armure-conteneur">
+            <img class="armure-image" src="systems/pep/assets/bouclier-transparent.png" />
+            <span class="armure-value" name="actor.system.armure.value">{{system.armure.value}}</span>
+        </span>
+    </header>
+
+    <nav class="nav-bar">
+        <button class="tab-button" data-tab="informations-tab">{{localize 'system.attributes.infos'}}</button>
+        <button class="tab-button" data-tab="equipement-tab">{{localize 'system.attributes.equipements'}}</button>
+        <button class="tab-button" data-tab="notes-tab">{{localize 'system.attributes.notes'}}</button>
+        <button class="tab-button" data-tab="handicap-tab">{{localize 'system.attributes.handicap'}}</button>
+    </nav>
+
+    <div id="informations-tab" class="tab-content active">
+        <img class="img-reload" src="systems/pep/assets/reload.png" id="reload-carac">
+
+        <!-- Caractéristiques -->
+        <div class="carac-conteneur">
+            {{#each system.caracteristique as |carac key|}}
+            <div class="carac">
+
+                <!-- Caractéristique principale -->
+                <label class="carac-principale test" data-key="{{key}}" data-type="caracteristique">
+                    {{localize (concat "system.attributes." key)}}
+                </label>
+
+                <!-- Input superposé sur le cercle -->
+                <input class="carac-input" type="number" name="system.caracteristique.{{key}}.value"
+                    value="{{carac.value}}" min="{{carac.min}}" max="{{carac.max}}">
+
+                <!-- Image de cercle -->
+                <img class="carac-cercle" src="systems/pep/assets/cercle_{{key}}.png" />
+
+                <!-- Compétences liées à cette caractéristique -->
+                <div class="competence-conteneur">
+                    {{#each carac.competence as |comp keyComp|}}
+                    <div class="competence">
+                        <div class="competence-souligne">
+                            <label class="competence-label test" data-parent="{{key}}" data-key="{{keyComp}}">
+                                {{localize (concat "system.attributes." keyComp)}}
+                            </label>
+                            <input class="competence-input" type="number"
+                                name="system.caracteristique.{{key}}.competence.{{keyComp}}.value"
+                                value="{{comp.value}}" min="{{comp.min}}" max="{{comp.max}}">
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            {{/each}}
+        </div>
+
+        <div class="carac-sec-conteneur">
+            {{#each system.caracteristique_secondaire as |carac key|}}
+            <div class="carac-sec">
+                <label class="carac-sec-label test" data-type="caracteristique_secondaire" data-key="{{key}}">
+                    {{localize (concat "system.attributes." key)}}</label>
+                <div class="carac-sec-value">
+                    <input class="carac-sec-input" type="number" name="system.caracteristique_secondaire.{{key}}.value"
+                        value="{{carac.value}}" min="{{carac.min}}" max="{{carac.max}}">
+                </div>
+            </div>
+            {{/each}}
+        </div>
+
+        <!-- Combat -->
+        <div class="combat-conteneur">
+            {{#if isRecoitDegatsSupplementaires}}
+            <label class="combat-label">{{localize 'system.attributes.degats_supp'}}</label>
+            {{/if}}
+            {{#if isDegatsBloques}}
+            <label class="combat-label">{{localize 'system.attributes.degats_bloques'}}</label>
+            {{/if}}
+            {{#if isCombat}}
+            <label class="combat-tactique-label">
+                {{localize 'system.attributes.repartir_tactique'}} : {{system.jet_tactique}}
+            </label>
+            <div class="combat">
+                {{#each system.equipements as |equipement|}}
+                {{#if (or (eq equipement.type "arme") (eq equipement.type "armure"))}}
+                <div class="arme-conteneur">
+                    <label class="arme" data-item-id="{{equipement._id}}" style="cursor: pointer; font-weight: bold;
+                            {{#if (eq equipement.system.tactiques_cumules equipement.system.cout_tactique)}}
+                                color: rgb(56,118,29);
+                            {{else}}
+                                color: rgb(100,0,0);
+                            {{/if}}">
+                        {{equipement.name}} : {{equipement.system.talent}}
+                        ({{equipement.system.tactiques_cumules}}/{{equipement.system.cout_tactique}})
+                    </label>
+                    {{#if (eq equipement.system.tactiques_cumules equipement.system.cout_tactique)}}
+                    <button class="utiliser-tactique" data-item-id="{{equipement._id}}">
+                        ✅
+                    </button>
+                    {{/if}}
+                </div>
+                {{/if}}
+                {{/each}}
+            </div>
+            {{/if}}
+        </div>
+    </div>
+
+    <div id="equipement-tab" class="tab-content">
+        <div class="equipement-conteneur">
+            <label class="equipement-label">{{localize 'system.attributes.equipements'}} :</label>
+            <label class="equipement-label-limite">({{localize
+                'system.attributes.limited_at'}}{{limiteEmplacements}}{{localize
+                'system.attributes.emplacement'}})</label>
+        </div>
+        <div class="equipement-dropzone">
+            {{#unless system.equipements.length}}
+            <p class="drag-message">{{localize 'system.attributes.glisser_equipement'}}</p>
+            {{/unless}}
+
+            <ul class="equipement-list">
+                {{#each system.equipements as |equipement|}}
+                <li class="equipement-item" data-item-id="{{equipement._id}}">
+                    <!-- Image de l'equipement -->
+                    <img class="img-equipement" src="{{equipement.img}}" alt="{{equipement.name}}">
+
+                    <!-- Nom de l'equipement cliquable -->
+                    <span class="equipement-name" data-item-id="{{equipement._id}}">
+                        {{equipement.name}}
+                    </span>
+
+                    {{#if equipement.system.de_usage}}
+                    <span class="jet-usage" data-key="{{equipement.system.de_usage}}" data-type="{{equipement.name}}"
+                        data-item-id="{{equipement.id}}">
+                        ({{equipement.system.de_usage}})
+                    </span>
+                    {{else if equipement.system.quantite}}
+                    <span class="equipement-quantite" data-key="equipement.system.quantite">
+                        ({{equipement.system.quantite}})
+                    </span>
+                    {{/if}}
+
+                    {{#if equipement.system.cout_tactique}}
+                    <span class="jet-usage" data-key="{{equipement.system.cout_tactique}}"
+                        data-type="{{equipement.name}}" data-item-id="{{equipement.id}}">
+                        (Coût : {{equipement.system.cout_tactique}}) / Tactiques cumulés :
+                        {{equipement.system.tactiques_cumules}}
+                    </span>
+                    {{/if}}
+
+                    <!-- Bouton de suppression -->
+                    <button class="delete-button" id="delete-equipement" data-item-id="{{equipement._id}}">
+                        X
+                    </button>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+
+    <div id="notes-tab" class="tab-content">
+        <div class='notes'>
+            {{editor
+            notes
+            target='system.description.value'
+            engine='prosemirror'
+            }}
+        </div>
+    </div>
+
+    <div id="handicap-tab" class="tab-content">
+        <label class="handicap-conteneur">{{localize 'system.attributes.handicaps'}} :</label>
+        <div class="handicap-dropzone">
+            {{#unless system.handicaps.length}}
+            <p class="drag-message">{{localize 'system.attributes.glisser_capacite'}}</p>
+            {{/unless}}
+
+            <ul class="handicap-list">
+                {{#each system.handicaps as |handicap|}}
+                <li class="handicap-item" data-item-id="{{handicap._id}}">
+                    <!-- Image du handicap -->
+                    <img class="img-handicap" src="{{handicap.img}}" alt="{{handicap.name}}">
+
+                    <!-- Nom du handicap cliquable -->
+                    <span class="handicap-name" data-item-id="{{handicap._id}}">
+                        {{handicap.name}}
+                    </span>
+
+                    <!-- Durée du handicap -->
+                    <span class="handicap-duree">
+                        ({{handicap.system.duree}} {{localize 'system.attributes.tours'}})
+                    </span>
+
+                    <!-- Bouton de suppression -->
+                    <button class="delete-button" id="delete-handicap" data-item-id="{{handicap._id}}">
+                        X
+                    </button>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</form>

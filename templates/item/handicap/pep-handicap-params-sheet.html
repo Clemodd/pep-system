@@ -1,0 +1,21 @@
+<form class="handicap-params-sheet" autocomplete="off">
+    <header class="header">
+        <label style="font-size: 1.2em; margin-bottom: 10px;"><b>Paramètres pour {{item.name}} :</b></label>
+    </header>
+
+    <div class="sheet-content">
+        {{#each system.modificateurs as |mod key|}}
+        <div class="modificateur-row" style="margin: 5px;display: flex; align-items: center;">
+            <label for="mod.{{key}}" class="modificateur-label">{{mod.nom}}</label>
+            {{#if (eq mod.type "boolean")}}
+            <input type="checkbox" name="system.modificateurs.{{key}}.value" style="transform: scale(0.8);" id="mod.{{key}}" {{#if
+                mod.value}}checked{{/if}}>
+            {{else}}
+            <label for="mod.{{key}}"> :</label>
+            <input type="number" name="system.modificateurs.{{key}}.value" id="mod.{{key}}" value="{{mod.value}}"
+                style="width: 20px; text-align: center; border: none; margin-left: 5px; background-color: transparent;">
+            {{/if}}
+        </div>
+        {{/each}}
+    </div>
+</form>

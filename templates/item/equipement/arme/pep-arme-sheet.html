@@ -1,0 +1,28 @@
+<form class="armure" autocomplete="off" draggable="true">
+    <header class="header">
+        <div class="img-conteneur">
+            <img class="item-img" src="{{item.img}}" data-edit="img" alt="{{item.nom}}"
+                style="width: 80px; height: 80px; cursor: pointer;">
+        </div>
+
+        <label class="nom-conteneur">
+            <input type="text" name="name" class="input" value="{{item.name}}" placeholder="Nom"
+                style="background: transparent; border: none; outline: none; font-size: 1.6em; font-weight: bold;" />
+
+            <textarea name="system.talent" placeholder="Talent de l'arme" rows="3"
+                style="background: transparent; border: none; font-size: 0.9em; font-family: inherit; resize: none;">{{{system.talent}}}</textarea>
+        </label>
+    </header>
+
+    <div class="sheet-content" style="margin: 5px;">
+        <label style="font-weight: bold; font-size: 1.2em;">Type d'arme :</label>
+        <input type="text" name="system.type" value="{{system.type}}" placeholder=".."
+            style="width: 100px; border:none; background: transparent;  outline: none; font-size: 1.2em;">
+    </div>
+    <div class="sheet-content" style="margin: 5px;">
+        <label style="font-weight: bold; font-size: 1.2em;">Coût tactique :</label>
+        <input type="number" name="system.cout_tactique" value="{{system.cout_tactique}}"
+            style="width: 15px; border:none; background: transparent;  outline: none; font-size: 1.3em;">
+        <label style="font-size: 1.2em;">({{system.tactiques_cumules}} cumulés)</label>
+    </div>
+</form>

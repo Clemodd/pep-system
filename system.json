@@ -1,0 +1,60 @@
+{
+  "id": "pep",
+  "name": "pep",
+  "title": "Pep",
+  "description": "The Pep system for FoundryVTT!",
+  "version": "0.0.1",
+  "compatibility": {
+    "minimum": "10",
+    "verified": "12"
+  },
+  "authors": [
+    {
+      "name": "Clement Jumeline",
+      "email": "cjumeline@tutanota.com",
+      "discord": "Clemodd",
+      "url": "https://discord.gg/TS8A5CAypd"
+    }
+  ],
+  "esmodules": [
+    "module/pep.js"
+  ],
+  "styles": [
+    "css/pep.css",
+    "css/pep-autre.css"
+  ],
+  "scripts": [],
+  "packs": [
+    {
+      "name": "pnjs",
+      "label": "PNJs Pep",
+      "path": "packs/pnjs.db",
+      "type": "Actor"
+    },
+    {
+      "name": "items",
+      "label": "Items Pep",
+      "path": "packs/items.db",
+      "type": "Item"
+    },
+    {
+      "name": "macros",
+      "label": "Macros Pep",
+      "path": "packs/macros.db",
+      "type": "Macro"
+    }
+  ],
+  "languages": [
+    {
+      "lang": "fr",
+      "name": "Français",
+      "path": "lang/fr.json"
+    }
+  ],
+  "grid": {
+    "distance": 1,
+    "units": "m"
+  },
+  "url": "TODO",
+  "download": "TODO"
+}

@@ -1,0 +1,83 @@
+<form class="pnj-params-sheet" autocomplete="off" style="margin: 10px;">
+
+    <div style="display: flex; flex-direction: row; align-items: center; text-align: center; position: relative;">
+        <label style="font-size: 1.2em; font-weight: bold; display: block;">Vie max : </label>
+        <input type="number" name="system.caracteristiques.vitalite.max" value="{{system.caracteristiques.vitalite.max}}" style="width:25px; border: none; background: transparent;">
+    </div>
+
+    <label style="display: block; margin-bottom: 20px;">
+        Certaines créatures possèdent des capacités spéciales.<br>
+        Les capacités passives s’appliquent automatiquement.<br>
+        Les capacités actives se déclenchent selon le résultat d’un dé de capacité (D6) qui sera lancé en même temps que
+        le jet de combat.
+    </label>
+
+
+    <div style="display: flex; flex-direction: row; align-items: center; text-align: center; position: relative;">
+        <input type="checkbox" name="system.capacite_passive.isActive" style="transform: scale(0.8);" {{#if
+            system.capacite_passive.isActive}}checked{{/if}}>
+        <label style="margin-left: 5px; font-size: 1.5em; font-weight: bold; display: block;">Capacités passives</label>
+    </div>
+
+    {{#if system.capacite_passive.isActive}}
+    <div style="margin-top: 10px; margin-bottom: 20px;">
+        <ul id="capacite-passive-list">
+            {{#each system.capacite_passive.value}}
+            <li style="display: flex; align-items: center; margin-bottom: 8px;">
+                <label>🔹</label>
+                <span contenteditable="true" class="capacite-input" data-index="{{@index}}" data-type="capacite_passive"
+                    style="background: transparent; border: none; font-size: 1.2em; font-weight: bold; min-width: 10px;">{{this}}</span>
+                <img src="systems/pep/assets/croix.png" class="remove-capacite" data-index="{{@index}}"
+                    data-type="capacite_passive"
+                    style="width: 12px; object-fit: contain; border: none; margin-left: 8px; cursor: pointer;" />
+            </li>
+            {{/each}}
+            <li style="display: flex; align-items: center; margin-bottom: 5px;">
+                <label>🔹</label>
+                <input id="new-capacite" placeholder="Ajouter une capacité..." data-type="capacite_passive"
+                    style="background: transparent; font-family: 'Signika', sans-serif; border: none; font-size: 1.1em; font-weight: bold; width: 400px;">
+            </li>
+        </ul>
+    </div>
+    {{/if}}
+
+
+    <div style="display: flex; flex-direction: row; align-items: center; text-align: center; position: relative;">
+        <input type="checkbox" name="system.capacite_active.isActive" style="transform: scale(0.8);" {{#if
+            system.capacite_active.isActive}}checked{{/if}}>
+        <label style="margin-left: 5px; font-size: 1.5em; font-weight: bold; display: block;">Capacités actives</label>
+        <label
+            style="margin-left: 5px; font-size: 1.0em; margin-top: 2px; font-weight: bold; display: block;">(Associées à
+            des résultats de dés)</label>
+    </div>
+
+    {{#if system.capacite_active.isActive}}
+    <div style="margin-top: 10px;">
+        <ul id="capacite-active-list">
+            {{#each system.capacite_active.value}}
+            <li style="display: flex; align-items: center; margin-bottom: 8px;">
+                <label>🔹</label>
+                <span contenteditable="true" class="capacite-active" data-index="{{@index}}" data-parent="de"
+                    data-type="capacite_active" placeholder="de" value="{{this.de}}"
+                    style="background: transparent; border: none; font-size: 1.2em; font-weight: bold; min-width: 10px;  margin-right: 10px;">{{this.de}}</span>
+                <span contenteditable="true" class="capacite-active" data-index="{{@index}}" data-parent="description"
+                    data-type="capacite_active" placeholder="Description" value="{{this.de}}"
+                    style="background: transparent; border: none; font-size: 1.2em; font-weight: bold; min-width: 10px;">{{this.description}}</span>
+                <img src="systems/pep/assets/croix.png" class="remove-capacite" data-index="{{@index}}"
+                    data-type="capacite_active"
+                    style="width: 12px; object-fit: contain; border: none; margin-left: 8px; cursor: pointer;" />
+            </li>
+            {{/each}}
+            <li style="display: flex; align-items: center; margin-bottom: 5px;">
+                <label>🔹</label>
+                <input id="new-capacite-description" placeholder="Ajouter une capacité..." data-type="capacite_active"
+                    style="background: transparent; font-family: 'Signika', sans-serif; border: none; font-size: 1.1em; font-weight: bold; width: 400px;">
+            </li>
+        </ul>
+    </div>
+    {{/if}}
+
+
+
+
+</form>

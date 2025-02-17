@@ -1,0 +1,28 @@
+<form class="consommable-sheet" autocomplete="off" draggable="true">
+    <header class="header">
+        <div class="img-conteneur">
+            <img class="item-img" src="{{item.img}}" data-edit="img" alt="{{item.nom}}"
+                style="width: 80px; height: 80px; margin-top: 10px; cursor: pointer;">
+        </div>
+
+        <label class="nom-conteneur">
+            <input type="text" name="name" class="input" value="{{item.name}}" placeholder="Nom"
+                style="background: transparent; border: none; outline: none; font-size: 1.6em;font-weight: bold;" />
+
+            <textarea name="system.description" placeholder="Description" rows="5"
+                style="background: transparent; border: none; font-size: 0.9em; font-family: inherit; resize: none;">{{{system.description}}}</textarea>
+        </label>
+    </header>
+
+    <div class="sheet-content">
+        <label>Dé d'usage :</label>
+        <input type="text" name="system.de_usage" value="{{system.de_usage}}"
+            style="width: 50px; height: 15px; border:none; background: transparent;  outline: none; font-weight: bold; font-size: 1.1em;">
+    </div>
+
+    <div style="display: flex; flex-direction: row; align-items: center; text-align: center; position: relative;">
+        <label style="font-weight: bold; display: block; margin-top: 1px;">Artéfact ?</label>
+        <input type="checkbox" name="system.isArtefact" style="transform: scale(0.8); margin-left: 5px; " {{#if
+            system.isArtefact}}checked{{/if}}>
+    </div>
+</form>

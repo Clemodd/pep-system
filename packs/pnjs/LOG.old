@@ -1,0 +1,5 @@
+2025/02/17-22:37:05.127 79dc Recovering log #123
+2025/02/17-22:37:05.129 79dc Level-0 table #125: started
+2025/02/17-22:37:05.134 79dc Level-0 table #125: 399806 bytes OK
+2025/02/17-22:37:05.144 79dc Delete type=0 #123
+2025/02/17-22:37:05.144 79dc Delete type=3 #122

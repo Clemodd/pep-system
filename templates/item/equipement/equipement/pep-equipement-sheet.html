@@ -1,0 +1,22 @@
+<form class="equipement-sheet" autocomplete="off" draggable="true">
+    <header class="header">
+        <div class="img-conteneur">
+            <img class="item-img" src="{{item.img}}" data-edit="img" alt="{{item.nom}}" style="width: 80px; height: 80px; margin-top: 10px; cursor: pointer;">    
+        </div>
+
+        <label class="nom-conteneur">
+            <input type="text" name="name" class="input"
+                value="{{item.name}}" placeholder="Nom"
+                style="background: transparent; border: none; outline: none; font-size: 1.6em;font-weight: bold;" />
+
+            <textarea name="system.description" placeholder="Description" rows="5"
+                style="background: transparent; border: none; font-size: 0.9em; font-family: inherit; resize: none;">{{{system.description}}}</textarea>
+        </label>
+    </header>
+
+    <div class="sheet-content">
+        <label>Quantité :</label>
+        <input type="number" name="system.quantite" value="{{system.quantite}}"
+            style="width: 50px; height: 15px; border:none; background: transparent;  outline: none; font-weight: bold; font-size: 1.1em;">
+    </div>
+</form>

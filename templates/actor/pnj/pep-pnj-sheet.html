@@ -1,0 +1,81 @@
+<form class="pnj-sheet" autocomplete="off">
+
+    <header class="header" style="display: flex; flex-direction: row; align-items: center;">
+        <div class="img-conteneur">
+            <img class="profile-img" src="{{actor.img}}" data-edit="img" alt="{{actor.name}}"
+                style="cursor: pointer;">
+        </div>
+
+        <!-- Nom & Description -->
+        <label class="nom-conteneur" style="margin-top: 10px;">
+
+            <label class="nom-conteneur">
+                <div style="display: flex; flex-direction: row; align-items: relative; justify-content:space-between">
+                    <input type="text" name="name" class="input" value="{{actor.name}}" placeholder="Nom PNJ"
+                        style="background: transparent; border: none; outline: none; font-size: 1.6em;font-weight: bold;" />
+                    <img class="open-params" data-item-id="{{item._id}}" src="systems/pep/assets/engrenage.png"
+                        style="width: 25px; height: 25px; cursor: pointer; border: none; margin-right: 15px; margin-bottom: 10px;">
+                </div>
+                <textarea name="system.description" placeholder="Description" rows="7"
+                    style="background: transparent; border: none; font-size: 0.9em; font-family: inherit; resize: none;">{{{system.description}}}</textarea>
+            </label>
+        </label>
+    </header>
+
+    <div style="border: 1px solid black;width: auto;"></div>
+    <div
+        style="display: flex; flex-direction: row; align-items: center; text-align: center; position: relative; justify-content:space-evenly; margin-bottom: 10px;">
+        {{#each system.caracteristiques as |carac key|}}
+        <div title="{{key}}" class="caracteristique-container"
+            style="display: flex; flex-direction: row; align-items: center; border: none;margin: 20px 0;">
+            <input type="number" name="system.caracteristiques.{{key}}.value" value="{{carac.value}}"
+                min="{{carac.min}}" max="{{carac.max}}"
+                style="width: 45px; height: 30px; font-size: 2.4em; font-weight: bold; background: transparent; border: none; outline: none; text-align: center;">
+            <img class="{{key}}" src="systems/pep/assets/PNJ/{{key}}.png"
+                style="border: none; width: 35px; max-width: none !important; cursor: pointer;">
+        </div>
+        {{/each}}
+    </div>
+
+    <div style="margin-left: 20px;">
+        {{#if system.capacite_passive.isActive}}
+        <div style="display: flex; flex-direction: row; align-items: center; text-align: center; position: relative;">
+            <label style="margin-left: 5px; font-size: 1.3em; font-weight: bold; display: block;">Capacités passives : </label>
+        </div>
+        <div style="margin-top: 10px; margin-bottom: 30px;">
+            <ul id="capacite-passive-list">
+                {{#each system.capacite_passive.value}}
+                <li style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <label style="font-size: 1.1em; font-weight: bold; min-width: 10px;">🔹 {{this}}</label>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+        {{/if}}
+
+        {{#if system.capacite_active.isActive}}
+        <div style="display: flex; flex-direction: row; align-items:baseline; text-align: center; position: relative;">
+            <label style="margin-left: 5px; font-size: 1.3em; font-weight: bold; display: block;">Capacités actives : </label>
+            <label
+                style="margin-left: 5px; font-size: 1.2em; font-weight: bold; display: block;">({{system.valeur_jet_capacite_speciale}})</label>
+        </div>
+
+        <div style="margin-top: 10px; margin-bottom: 20px;">
+            <div id="capacite-active-list">
+                {{#each system.capacite_active.value}}
+                <div style="display: flex; align-items: center; margin-bottom: 8px; margin-left: 15px;">
+                    {{#if (contains this.de @root.system.valeur_jet_capacite_speciale)}}
+                    <label style="font-size: 1.1em; font-weight: bold; min-width: 10px; color: rgb(56,118,29);">
+                        🔹{{affichageJetsDe this.de}} : {{this.description}}.</label>
+                    {{else}}
+                    <label style="font-size: 1.1em; font-weight: bold; min-width: 10px; color: rgb(100,0,0);">
+                        🔹{{affichageJetsDe this.de}} : {{this.description}}.</label>
+                    {{/if}}
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        {{/if}}
+    </div>
+
+</form>

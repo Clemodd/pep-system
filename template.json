@@ -1,0 +1,301 @@
+{
+	"Actor": {
+		"types": [
+			"joueur",
+			"pnj"
+		],
+		"templates": {
+			"base": {
+				"nom": "",
+				"description": ""
+			}
+		},
+		"joueur": {
+			"templates": [
+				"base"
+			],
+			"role": "",
+			"caracteristique": {
+				"vigueur": {
+					"value": 1,
+					"min": 1,
+					"max": 5,
+					"competence": {
+						"combat": {
+							"value": 0,
+							"min": 0,
+							"max": 10
+						},
+						"athletisme": {
+							"value": 0,
+							"min": 0,
+							"max": 10
+						},
+						"endurance": {
+							"value": 0,
+							"min": 0,
+							"max": 10
+						}
+					}
+				},
+				"agilite": {
+					"value": 1,
+					"min": 1,
+					"max": 5,
+					"competence": {
+						"equilibre": {
+							"value": 0,
+							"min": 0,
+							"max": 10
+						},
+						"esquive": {
+							"value": 0,
+							"min": 0,
+							"max": 10
+						},
+						"furtivite": {
+							"value": 0,
+							"min": 0,
+							"max": 10
+						}
+					}
+				},
+				"sensibilite": {
+					"value": 1,
+					"min": 1,
+					"max": 5,
+					"competence": {
+						"tir": {
+							"value": 0,
+							"min": 0,
+							"max": 10
+						},
+						"fouille": {
+							"value": 0,
+							"min": 0,
+							"max": 10
+						},
+						"scouting": {
+							"value": 0,
+							"min": 0,
+							"max": 10
+						}
+					}
+				},
+				"esprit": {
+					"value": 1,
+					"min": 1,
+					"max": 5,
+					"competence": {
+						"erudition": {
+							"value": 0,
+							"min": 0,
+							"max": 10
+						},
+						"medecine": {
+							"value": 0,
+							"min": 0,
+							"max": 10
+						},
+						"persuasion": {
+							"value": 0,
+							"min": 0,
+							"max": 10
+						}
+					}
+				}
+			},
+			"caracteristique_secondaire": {
+				"vitalite": {
+					"value": 0,
+					"min": -5,
+					"max": 8
+				},
+				"mobilite": {
+					"value": 0,
+					"min": 0,
+					"max": 50
+				},
+				"point_hero": {
+					"value": 1,
+					"min": 0,
+					"max": 1
+				},
+				"coeur": {
+					"value": 0,
+					"min": 0,
+					"max": 50
+				}
+			},
+			"armure": {
+				"value": 0,
+				"min": 0,
+				"max": 50
+			},
+			"experience": {
+				"value": 0,
+				"min": 0,
+				"max": 50
+			},
+			"blessure": {
+				"value": 0,
+				"min": 0,
+				"max": 50
+			},
+			"vie": {
+				"value": 0,
+				"min": 0,
+				"max": 8
+			},
+			"jet_tactique": 0,
+			"equipement": []
+		},
+		"pnj": {
+			"templates": [
+				"base"
+			],
+			"caracteristiques": {
+				"combat": {
+					"value": 0,
+					"min": 0,
+					"max": 50
+				},
+				"vitalite": {
+					"value": 0,
+					"min": 0,
+					"max": 50
+				},
+				"armure": {
+					"value": 0,
+					"min": 0,
+					"max": 50
+				},
+				"mobilite": {
+					"value": 0,
+					"min": 0,
+					"max": 50
+				}
+			},
+			"capacite_passive": {
+				"isActive": false,
+				"value": []
+			},
+			"capacite_active": {
+				"isActive": false,
+				"value": []
+			},
+			"valeur_jet_capacite_speciale": 0,
+			"vie": {
+				"value": 0,
+				"max": 50
+			}
+		}
+	},
+	"Item": {
+		"types": [
+			"armure",
+			"arme",
+			"consommable",
+			"equipement",
+			"handicap"
+		],
+		"capacite": {
+			"templates": [
+				"base"
+			],
+			"nom": "",
+			"description": "",
+			"type": "active",
+			"niveau": {
+				"value": 0,
+				"min": 0,
+				"max": 5
+			},
+			"resultats_de": []
+		},
+		"armure": {
+			"description": "",
+			"bonus": 1,
+			"talent": "",
+			"cout_tactique": 0,
+			"tactiques_cumules": 0
+		},
+		"arme": {
+			"talent": "",
+			"type": "",
+			"cout_tactique": 0,
+			"tactiques_cumules": 0
+		},
+		"equipement": {
+			"description": "",
+			"quantite": 1
+		},
+		"consommable": {
+			"description": "Lors de l’utilisation de l'objet, il faut lancer un dé d'usage.\nSur un score de 1 à 3, le dé d’usage passera au dé de rang inférieur.\nLorsqu’un D4 fait de même, la ressource est épuisée.\nD20 > D12 > D10 > D8 > D6 > D4 > épuisé.",
+			"de_usage": "1d20",
+			"isArtefact": false
+		},
+		"handicap": {
+			"description": "",
+			"duree": "1",
+			"acquisition_tour": "0",
+			"modificateurs": {
+				"mobilite": {
+					"nom": "Malus de mobilité",
+					"value": 0,
+					"type": "input"
+				},
+				"competences_globales": {
+					"nom": "Malus général",
+					"value": 0,
+					"type": "input"
+				},
+				"peut_tirer": {
+					"nom": "Peut tirer ?",
+					"value": true,
+					"type": "boolean"
+				},
+				"peut_infliger_degats": {
+					"nom": "Peut infliger des dégâts ?",
+					"value": true,
+					"type": "boolean"
+				},
+				"peut_utiliser_tactiques": {
+					"nom": "Peut utiliser des dés tactiques ?",
+					"value": true,
+					"type": "boolean"
+				},
+				"peut_se_deplacer": {
+					"nom": "Peut se déplacer ?",
+					"value": true,
+					"type": "boolean"
+				},
+				"peut_esquiver": {
+					"nom": "Peut esquiver ?",
+					"value": true,
+					"type": "boolean"
+				},
+				"reset_armure": {
+					"nom": "Reset l'armure à 0 ?",
+					"value": false,
+					"type": "boolean"
+				},
+				"recoit_degats_bonus": {
+					"nom": "Reçoit +1 dégâts supplémentaires ?",
+					"value": false,
+					"type": "boolean"
+				},
+				"condition_repos": {
+					"nom": "Effet actif jusqu'au repos ?",
+					"value": false,
+					"type": "boolean"
+				},
+				"condition_combat": {
+					"nom": "Effet actif uniquement en combat ?",
+					"value": false,
+					"type": "boolean"
+				}
+			}
+		}
+	}
+}

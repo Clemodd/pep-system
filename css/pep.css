@@ -1,0 +1,462 @@
+.pep {
+
+    /* Styles généraux pour toute la feuille d'acteur */
+    *:focus,
+    *:active,
+    *:hover {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    .header {
+        display: flex;
+        vertical-align: center;
+        gap: 10px;
+    }
+
+    .editor {
+        height: 165px;
+        padding: 3px;
+    }
+
+    .personnage-sheet {
+        display: block;
+        align-items: start;
+    }
+
+    .img-conteneur {
+        flex-shrink: 0;
+    }
+
+    .profile-img {
+        width: 100px;
+        border: none;
+    }
+
+    .nom-conteneur {
+        flex-grow: 1;
+        margin-top: 20px;
+    }
+
+    input {
+        width: 300px;
+        font-size: 1.2rem;
+        padding: 5px;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-weight: bold;
+    }
+
+    .input-actor-nom {
+        font-size: 1.6em;
+    }
+
+    .input-actor-role {
+        font-size: 1.4em;
+        margin-top: 10px;
+        color: rgb(63, 63, 63);
+    }
+
+
+    .xp-conteneur {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-top: 20px;
+        width: 50px;
+    }
+
+    .xp-label {
+        font-weight: bold;
+        font-size: 1.4em;
+    }
+
+    .xp-cercle {
+        width: 30px;
+        height: 30px;
+        border: 2px solid black;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .xp-input {
+        width: 45px;
+        height: 45px;
+        text-align: center;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 1.2em;
+    }
+
+    .armure-conteneur {
+        position: relative;
+        display: inline-block;
+        border: none;
+        margin-top: 20px;
+        margin-right: 40px;
+        margin-left: 30px;
+    }
+
+    .armure-image {
+        border: none;
+        width: 58px;
+        max-width: none
+    }
+
+    .armure-value {
+        position: absolute;
+        top: 35%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: rgb(0, 0, 0);
+        font-size: 1.9em;
+        font-weight: bold;
+    }
+
+    .nav-bar {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+        border-radius: 8px;
+    }
+
+    .tab-button {
+        background: transparent;
+        border: 2px solid black;
+        font-size: 1.2em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+        border-bottom: none;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .tab-button:not(.active) {
+        color: black;
+    }
+
+    .tab-button.active {
+        background-color: black;
+        color: white;
+    }
+
+
+    .tab-content {
+        display: none;
+        border-top: 2px solid black;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .img-reload {
+        position: absolute;
+        top: 195px;
+        right: 15px;
+        width: 20px;
+        cursor: pointer;
+        border: none
+    }
+
+    .carac-conteneur {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        margin: 10px;
+    }
+
+    .carac {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-top: 14px;
+        position: relative;
+    }
+
+    .carac-principale {
+        cursor: pointer;
+        font-weight: bold;
+        border-bottom: 1px solid black;
+        font-size: 1.4em;
+        margin-bottom: 10px;
+        white-space: nowrap;
+    }
+
+    .carac-input {
+        font-weight: bold;
+        position: absolute;
+        top: 27.5%;
+        left: 50.5%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 1.2em
+    }
+
+    .carac-cercle {
+        width: 140px;
+        object-fit: contain;
+        border: none;
+    }
+
+    .competence-conteneur {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .competence {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin: 10px;
+        width: 100px;
+    }
+
+    .competence-souligne {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid black;
+        width: 100px;
+    }
+
+    .competence-label {
+        cursor: pointer;
+        font-weight: bold;
+        margin-right: 5px;
+        white-space: nowrap;
+    }
+
+    .competence-input {
+        width: 15px;
+        height: 20px;
+        background: transparent;
+        border: none;
+        outline: none;
+        text-align: center;
+    }
+
+    .carac-sec-conteneur {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .carac-sec {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin: 20px;
+        width: 100px;
+    }
+
+    .carac-sec-label {
+        cursor: pointer;
+        font-weight: bold;
+        border-bottom: 1px solid black;
+        font-size: 1.4em;
+        margin-bottom: 10px;
+        white-space: nowrap
+    }
+
+    .carac-sec-value {
+        width: 50px;
+        height: 50px;
+        border: 2px solid black;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .carac-sec-input {
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 1.1em;
+    }
+
+    .combat-conteneur {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .combat-label {
+        font-weight: bold;
+    }
+
+    .combat-tactique-label {
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    .combat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .arme-conteneur {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .utiliser-tactique {
+        width: 30px;
+        height: 25px;
+        background-color: transparent;
+        border-radius: 8px;
+        border: 1px solid black;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .equipement-conteneur {
+        display: flex;
+        align-items: flex-end;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+
+    .equipement-label {
+        margin-right: 5px;
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+    .equipement-label-limite {
+        font-weight: bold;
+        margin-bottom: 3px;
+    }
+
+    .equipement-dropzone {
+        border: 2px dashed gray;
+        padding: 5px;
+        min-height: 50px;
+    }
+
+    .drag-message {
+        margin-left: 5px;
+    }
+
+    .equipement-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .img-equipement {
+        width: 40px;
+        height: 40px;
+        border: none;
+        margin-right: 10px;
+    }
+
+    .equipement-name {
+        cursor: pointer;
+        font-weight: bold;
+        text-decoration: underline;
+        font-size: 1.2em;
+        margin-right: 5px;
+    }
+
+    .jet-usage {
+        font-weight: bold;
+        font-size: 1.1em;
+        cursor: pointer;
+    }
+
+    .equipement-quantite {
+        font-weight: bold;
+        font-size: 1em;
+    }
+
+    .notes {
+        border: 2px solid black;
+        border-radius: 10px;
+        height: 500px;
+    }
+
+    .handicap-conteneur {
+        margin-top: 10px;
+        margin-bottom: 5px;
+        font-size: 1.5em;
+        font-weight: bold;
+        display: block;
+    }
+
+    .handicap-dropzone {
+        border: 2px dashed gray;
+        padding: 5px;
+        min-height: 50px;
+    }
+
+    .drag-message {
+        margin-left: 5px;
+    }
+
+    .handicap-item {
+        display: flex;
+        align-items: center;
+    }
+
+    .img-handicap {
+        width: 50px;
+        height: 50px;
+        border: none;
+        margin-right: 10px;
+    }
+
+    .handicap-name {
+        cursor: pointer;
+        font-weight: bold;
+        text-decoration: underline;
+        font-size: 1.2em;
+        margin-right: 5px;
+    }
+
+    .handicap-duree {
+        font-weight: bold;
+        font-size: 1em;
+    }
+
+    .delete-button {
+        width: 40px;
+        margin-left: auto;
+        border: none;
+        background-color: transparent;
+        font-weight: bold;
+        font-size: 1.5em;
+    }
+}

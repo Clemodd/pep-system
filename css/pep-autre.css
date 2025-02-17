@@ -1,0 +1,54 @@
+.pep-autre {
+
+    *:focus,
+    *:active,
+    *:hover {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    .header {
+        display: flex;
+        vertical-align: center;
+        /* Centre l'image et le label verticalement */
+        gap: 10px;
+        /* Espacement entre l’image et le champ de texte */
+    }
+
+    .editor {
+        height: 165px;
+        padding: 3px;
+    }
+
+    .personnage-sheet {
+        display: block;
+        align-items: start;
+    }
+
+    .img-conteneur {
+        flex-shrink: 0;
+        /* Empêche l’image de se réduire */
+    }
+
+    .profile-img {
+        width: 100px;
+        border: none;
+    }
+
+    .item-img {
+        width: 80px;
+        border: none;
+    }
+
+    .nom-conteneur {
+        flex-grow: 1;
+        /* Permet au champ texte d'occuper l'espace disponible */
+    }
+
+    .input {
+        width: 300px;
+        font-size: 1.2rem;
+        padding: 5px;
+    }
+
+}

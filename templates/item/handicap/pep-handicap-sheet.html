@@ -1,0 +1,25 @@
+<form class="handicap-sheet" autocomplete="off" draggable="true">
+    <header class="header">
+        <div class="img-conteneur">
+            <img class="item-img" src="{{item.img}}" data-edit="img" alt="{{item.name}}" style="cursor: pointer;">
+        </div>
+
+        <label class="nom-conteneur">
+            <input type="text" name="name" class="input" value="{{item.name}}" placeholder="Nom handicap"
+                style="background: transparent; border: none; outline: none; font-size: 1.6em;font-weight: bold;" />
+
+            <textarea name="system.description" placeholder="Description" rows="5"
+                style="background: transparent; border: none; font-size: 0.9em; font-family: inherit; resize: none;">{{{system.description}}}</textarea>
+        </label>
+
+        <img class="open-params" data-item-id="{{item._id}}" src="systems/pep/assets/engrenage.png"
+            style="width: 25px; height: 25px; cursor: pointer; border: none;">
+    </header>
+
+    <div class="sheet-content">
+        <label>Durée :</label>
+        <input type="number" name="system.duree" value="{{system.duree}}"
+            style="width: 25px; height: 15px; border:none; background: transparent;  outline: none; text-align: center; font-weight: bold; font-size: 1.2em;">
+        <label>tours.</label>
+    </div>
+</form>
