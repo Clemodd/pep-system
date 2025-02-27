@@ -3,7 +3,7 @@
   "name": "pep",
   "title": "Pep",
   "description": "The Pep system for FoundryVTT!",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "compatibility": {
     "minimum": "10",
     "verified": "12"
@@ -42,6 +42,24 @@
       "label": "Macros Pep",
       "path": "packs/macros.db",
       "type": "Macro"
+    },
+    {
+      "name": "rollable table",
+      "label": "Rollable Table Pep",
+      "path": "packs/rollableTable.db",
+      "type": "RollTable"
+    },
+    {
+      "name": "journal",
+      "label": "Journal Pep",
+      "path": "packs/journal.db",
+      "type": "JournalEntry"
+    },
+    {
+      "name": "scenes",
+      "label": "Scenes Pep",
+      "path": "packs/scenes.db",
+      "type": "Scene"
     }
   ],
   "languages": [
