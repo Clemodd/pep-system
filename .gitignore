@@ -1,0 +1,4 @@
+packs/
+packs/**/*.log
+packs/**/MANIFEST-*
+assets/Amaranthe/Sons/

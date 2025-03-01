@@ -3,7 +3,7 @@
   "name": "pep",
   "title": "Pep",
   "description": "The Pep system for FoundryVTT!",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "compatibility": {
     "minimum": "10",
     "verified": "12"
@@ -67,6 +67,11 @@
       "lang": "fr",
       "name": "Français",
       "path": "lang/fr.json"
+    },
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
     }
   ],
   "grid": {
