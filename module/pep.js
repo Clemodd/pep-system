@@ -75,6 +75,20 @@ Hooks.once("init", function () {
       }
     }
   };
+
+  //Surcharge de ActorSheet._render pour bloquer l'accès aux PNJ pour les joueurs
+  const originalRender = ActorSheet.prototype._render;
+
+  ActorSheet.prototype._render = async function (...args) {
+    // Si l'acteur est un PNJ et l'utilisateur n'est pas GM, on bloque l'accès
+    if (this.actor.type === "pnj" && !game.user.isGM) {
+      ui.notifications.warn("Vous ne pouvez pas ouvrir la fiche de ce PNJ !");
+      return;
+    }
+
+    // Sinon, on exécute le rendu normal
+    return originalRender.apply(this, args);
+  };
 });
 
 Hooks.on("updateActor", async (actor, update) => {
@@ -200,5 +214,3 @@ Hooks.on("deleteItem", (item) => {
   console.log(`❌ Supprimé : ${item.name} (${item.id})`);
   item.parent.sheet.render();
 });
-
-
