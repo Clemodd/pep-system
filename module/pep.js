@@ -89,6 +89,18 @@ Hooks.once("init", function () {
     // Sinon, on exécute le rendu normal
     return originalRender.apply(this, args);
   };
+
+  const originalItemRender = ItemSheet.prototype._render;
+  ItemSheet.prototype._render = async function (...args) {
+    // Vérifier si l'utilisateur est un joueur (pas un GM) et si l'item ne lui appartient pas
+    if (!game.user.isGM) {
+      ui.notifications.warn("Vous ne pouvez pas ouvrir cet objet !");
+      return;
+    }
+
+    // Exécuter le rendu normal sinon
+    return originalItemRender.apply(this, args);
+  };
 });
 
 Hooks.on("updateActor", async (actor, update) => {
