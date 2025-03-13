@@ -106,6 +106,10 @@ Hooks.once("init", function () {
 Hooks.on("updateActor", async (actor, update) => {
   if (!actor) return;
 
+  if (actor.isToken) {
+    return;
+  }
+
   if (foundry.utils.getProperty(update, "system.caracteristiques.vitalite.max") !== undefined) {
     let nouvelleValeurMax = foundry.utils.getProperty(update, "system.caracteristiques.vitalite.max");
 
@@ -192,18 +196,21 @@ Hooks.on("updateCombat", (combat, update) => {
             handicap.update({ "system.acquisition_tour": combat.round });
           }
         });
-      } else {
-        console.log(`✅ ${actor.name} n'a actuellement aucun handicap.`);
       }
     });
   }
 });
 
 Hooks.on("deleteCombat", (combat) => {
-
   combat.combatants.forEach(combatant => {
     combatant.actor.update({ "system.jet_tactique": 0 });
-  });
+
+    combatant.actor.items.forEach(item => {
+      if (["arme", "armure"].includes(item.type)) {
+        item.update({ "system.tactiques_cumules": 0 });
+      }
+    });
+  });  
 });
 
 Hooks.on("createItem", (item) => {
@@ -225,4 +232,30 @@ Hooks.on("deleteItem", (item) => {
 
   console.log(`❌ Supprimé : ${item.name} (${item.id})`);
   item.parent.sheet.render();
+});
+
+// Maj du nom sur Actor + token
+Hooks.on("updateActor", (actor, updates) => {
+  if (updates.hasOwnProperty('name') || updates.hasOwnProperty('img')) {
+    const tokens = actor.getActiveTokens();
+
+    if (tokens.length > 0) {
+      const token = tokens[0];
+
+      const tokenData = {
+        name: updates.name || token.name
+      };
+
+      try {
+        token.document.update(tokenData);
+        console.log("Token mis à jour avec succès !");
+      } catch (error) {
+        console.error("Erreur lors de la mise à jour du token : ", error);
+      }
+    } else {
+      console.warn("Aucun token actif trouvé pour cet acteur.");
+    }
+  } else {
+    console.log("Pas de changement détecté sur le nom ou l'image.");
+  }
 });
