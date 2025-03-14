@@ -158,7 +158,18 @@
 
     .img-reload {
         position: absolute;
+        z-index: 1000;
         top: 195px;
+        right: 15px;
+        width: 20px;
+        cursor: pointer;
+        border: none
+    }
+
+    .img-risque {
+        position: absolute;
+        z-index: 1000;
+        top: 225px;
         right: 15px;
         width: 20px;
         cursor: pointer;

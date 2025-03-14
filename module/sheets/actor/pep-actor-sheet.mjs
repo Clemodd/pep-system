@@ -11,12 +11,13 @@ export class PepActorSheet extends ActorSheet {
   }
 
   // Récupère les datas pour les envoyer uniquement au fichier HTML.
-  getData() {
+  async getData() {
     const context = super.getData();
     const actorData = context.data; // Copie des données acteur
 
     context.system = actorData.system;
     context.flags = actorData.flags;
+    context.img = this.actor.getActiveTokens()[0]?.document.texture.src || "icons/svg/mystery-man.svg";
     context.rollData = context.actor.getRollData(); // Pour mettre du texte dynamique et récupérer des variables (ex:[[@str.mod]])
     context.limiteEmplacements = this.actor.system.caracteristique.vigueur.value + 5;
     context.isCombat = game.combat !== null && game.combat.round > 0;
@@ -53,6 +54,7 @@ export class PepActorSheet extends ActorSheet {
     this._JetUsage(html)
     this._GestionArmes(html)
     this._UtiliserTactiques(html)
+    this._Jet_Risque(html)
   }
 
   _setActiveTab(html, tab) {
@@ -456,7 +458,9 @@ export class PepActorSheet extends ActorSheet {
 
   _GestionInput(html) {
     html.find('input[type="number"]').on('input', (event) => {
+      const actor = this.actor;
       const input = event.currentTarget;
+      const key = event.currentTarget.dataset.key;
 
       const min = Number(input.getAttribute('min'));
       const max = Number(input.getAttribute('max'));
@@ -467,6 +471,11 @@ export class PepActorSheet extends ActorSheet {
       if (input.value !== "") {
         if (value < min) input.value = min;
         if (value > max) input.value = max;
+
+        ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<b>${actor.name}</b> a modifié <b>${key}</b> à <b>${value}</b>.`,
+        });
       }
     });
   }
@@ -540,6 +549,30 @@ export class PepActorSheet extends ActorSheet {
         Agilité : ${resultat[1]}<br>
         Sensibilité : ${resultat[2]}<br>
         Esprit : ${resultat[3]}`
+      });
+    });
+  }
+
+  _Jet_Risque(html) {
+    html.find('#jet-risque').on('click', async (event) => {
+      event.preventDefault();
+
+      let roll = new Roll("1df");
+      await roll.evaluate();
+
+      const resultat = roll.dice[0].results.map(r => r.result);
+
+      const nbSucces = resultat.filter(r => r === 1).length;
+      const nbCrane = resultat.filter(r => r === 0).length;
+
+      // Affiche le résultat dans le chat
+      roll.toMessage({
+        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+        flavor: `Jet de <b>risque<b> 🎲<br>
+        
+        <b>Détails du jet</b> : <br>
+        ✅ <b>Succès</b> : ${nbSucces} <br>
+        💀 <b>Crânes</b> : ${nbCrane}`
       });
     });
   }

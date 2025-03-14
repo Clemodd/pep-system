@@ -236,7 +236,7 @@ Hooks.on("deleteItem", (item) => {
 
 // Maj du nom sur Actor + token
 Hooks.on("updateActor", (actor, updates) => {
-  if (updates.hasOwnProperty('name') || updates.hasOwnProperty('img')) {
+  if (updates.hasOwnProperty('name')) {
     const tokens = actor.getActiveTokens();
 
     if (tokens.length > 0) {
@@ -256,6 +256,20 @@ Hooks.on("updateActor", (actor, updates) => {
       console.warn("Aucun token actif trouvé pour cet acteur.");
     }
   } else {
-    console.log("Pas de changement détecté sur le nom ou l'image.");
+    console.log("Pas de changement détecté sur le nom");
   }
+
+  if (updates.hasOwnProperty("texture") && updates.texture.hasOwnProperty("src")) {
+    const actor = token.actor;
+    if (!actor) return;
+
+    console.log("[DEBUG] Mise à jour de l'image du token détectée :", updates.texture.src);
+
+    try {
+        actor.update({ "img": updates.texture.src });
+        console.log("[DEBUG] Image de l'acteur mise à jour avec succès !");
+    } catch (error) {
+        console.error("[ERREUR] Impossible de mettre à jour l'image de l'acteur :", error);
+    }
+}
 });

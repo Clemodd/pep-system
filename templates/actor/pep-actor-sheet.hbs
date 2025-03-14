@@ -2,7 +2,7 @@
 
     <header class="header">
         <div class="img-conteneur">
-            <img class="profile-img" src="{{actor.img}}" data-edit="img" alt="{{actor.name}}">
+            <img class="profile-img" src="{{img}}">
         </div>
 
         <!-- Nom & Rôle -->
@@ -38,6 +38,7 @@
 
     <div id="informations-tab" class="tab-content active">
         <img class="img-reload" src="systems/pep/assets/reload.png" id="reload-carac">
+        <img class="img-risque" src="systems/pep/assets/de.png" id="jet-risque">
 
         <!-- Caractéristiques -->
         <div class="carac-conteneur">
@@ -50,7 +51,7 @@
                 </label>
 
                 <!-- Input superposé sur le cercle -->
-                <input class="carac-input" type="number" name="system.caracteristique.{{key}}.value"
+                <input class="carac-input" type="number" data-key="{{key}}" name="system.caracteristique.{{key}}.value"
                     value="{{carac.value}}" min="{{carac.min}}" max="{{carac.max}}">
 
                 <!-- Image de cercle -->
@@ -64,7 +65,7 @@
                             <label class="competence-label test" data-parent="{{key}}" data-key="{{keyComp}}">
                                 {{localize (concat "system.attributes." keyComp)}}
                             </label>
-                            <input class="competence-input" type="number"
+                            <input class="competence-input" type="number" data-key="{{keyComp}}"
                                 name="system.caracteristique.{{key}}.competence.{{keyComp}}.value"
                                 value="{{comp.value}}" min="{{comp.min}}" max="{{comp.max}}">
                         </div>
@@ -81,7 +82,7 @@
                 <label class="carac-sec-label test" data-type="caracteristique_secondaire" data-key="{{key}}">
                     {{localize (concat "system.attributes." key)}}</label>
                 <div class="carac-sec-value">
-                    <input class="carac-sec-input" type="number" name="system.caracteristique_secondaire.{{key}}.value"
+                    <input class="carac-sec-input" data-key="{{key}}" type="number" name="system.caracteristique_secondaire.{{key}}.value"
                         value="{{carac.value}}" min="{{carac.min}}" max="{{carac.max}}">
                 </div>
             </div>

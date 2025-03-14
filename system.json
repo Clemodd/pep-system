@@ -3,7 +3,7 @@
   "name": "pep",
   "title": "Pep",
   "description": "The Pep system for FoundryVTT!",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "compatibility": {
     "minimum": "10",
     "verified": "12"
