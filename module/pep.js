@@ -12,10 +12,9 @@ Hooks.once("init", function () {
   console.log("PEP | Initialisation...");
 
   // Constantes de configuration
-  CONFIG.ActiveEffect.legacyTransferral = false; // TODO doc
+  CONFIG.ActiveEffect.legacyTransferral = false;
   CONFIG.Combat.initiative.formula = "1d20";
   CONFIG.PEP = {
-    JET_DE_4: "1d4",
     JET_DE_CAPACITE: "1d6",
     JET_DE_FATE: "dF"
   };
@@ -23,19 +22,19 @@ Hooks.once("init", function () {
   Actors.registerSheet("pep", PepActorSheet, {
     makeDefault: true,
     types: ["joueur"],
-    label: "Feuille de joueur PEP"
+    label: game.i18n.localize(`system.attributes.feuille_joueur_label`)
   });
 
   Actors.registerSheet("pep", PepPnjSheet, {
     makeDefault: true,
     types: ["pnj"],
-    label: "Feuille de PNJ PEP"
+    label: game.i18n.localize(`system.attributes.feuille_pnj_label`)
   });
 
   Actors.registerSheet("pep", PepPnjParamsSheet, {
     makeDefault: false,
     types: ["pnj"],
-    label: "Paramètres des PNJ"
+    label: game.i18n.localize(`system.attributes.parametres_pnj_label`)
   });
 
   Items.registerSheet("pep", PepItemArmureSheet, {
@@ -65,7 +64,7 @@ Hooks.once("init", function () {
 
   Items.registerSheet("pep", PepItemHandicapParamSheet, {
     makeDefault: false,
-    label: "Paramètres Handicap"
+    label: game.i18n.localize(`system.attributes.parametres_handicap_label`)
   });
 
   Combat.prototype.rollNPC = async function () {
@@ -82,7 +81,7 @@ Hooks.once("init", function () {
   ActorSheet.prototype._render = async function (...args) {
     // Si l'acteur est un PNJ et l'utilisateur n'est pas GM, on bloque l'accès
     if (this.actor.type === "pnj" && !game.user.isGM) {
-      ui.notifications.warn("Vous ne pouvez pas ouvrir la fiche de ce PNJ !");
+      ui.notifications.warn(game.i18n.localize(`system.attributes.acces_pnj_interdit`));
       return;
     }
 
@@ -94,7 +93,7 @@ Hooks.once("init", function () {
   ItemSheet.prototype._render = async function (...args) {
     // Vérifier si l'utilisateur est un joueur (pas un GM) et si l'item ne lui appartient pas
     if (!game.user.isGM) {
-      ui.notifications.warn("Vous ne pouvez pas ouvrir cet objet !");
+      ui.notifications.warn(game.i18n.localize(`system.attributes.acces_objet_interdit`));
       return;
     }
 
@@ -114,7 +113,7 @@ Hooks.on("updateActor", async (actor, update) => {
     let nouvelleValeurMax = foundry.utils.getProperty(update, "system.caracteristiques.vitalite.max");
 
     if (actor.system.vie?.max !== nouvelleValeurMax) {
-      console.log(`🔄 Mise à jour de system.vie.max pour ${actor.name} : ${nouvelleValeurMax}`);
+      console.log(game.i18n.format('system.attributes.maj_vie_max', { actor_name: actor.name, nouvelle_valeur_max: nouvelleValeurMax }));
       await actor.update({ "system.vie.max": nouvelleValeurMax });
     }
   }
@@ -143,7 +142,7 @@ Hooks.on("updateActor", async (actor, update) => {
     : actor.system.caracteristiques?.vitalite?.value ?? 0;
 
   if (actor.system.vie?.value !== vitalite) {
-    console.log(`🔄 Mise à jour de system.vie.value : ${vitalite}`);
+    console.log(game.i18n.format('system.attributes.maj_vie_value', { vitalite: vitalite }));
     // Vérifie que l'update en cours ne contient pas déjà cette modification pour éviter la boucle
     if (foundry.utils.getProperty(update, "system.vie.value") === undefined) {
       await actor.update({ "system.vie.value": vitalite });
@@ -161,16 +160,15 @@ Hooks.on("updateActor", async (actor, update) => {
   if (handicaps.length > 0) {
     handicaps.forEach(handicap => {
       if (handicap.system.modificateurs?.condition_repos?.value) {
-        console.log(`❗ ${actor.name} a un handicap lié au repos : ${handicap.name}`);
-
+        console.log(game.i18n.format('system.attributes.handicap_lie_au_repos', { actor_name: actor.name, handicap_name: handicap.name }));
         if (isRepose) {
-          console.log(`🟢 Suppression du handicap lié au repos`);
+          console.log(game.i18n.localize(`system.attributes.suppression_handicap_repos`));
           actor.deleteEmbeddedDocuments("Item", [handicap.id]);
         }
       }
     });
   } else {
-    console.log(`✅ ${actor.name} n'a actuellement aucun handicap.`);
+    console.log(game.i18n.format('system.attributes.aucun_handicap', { actor_name: actor.name }));
   }
 });
 
@@ -210,27 +208,24 @@ Hooks.on("deleteCombat", (combat) => {
         item.update({ "system.tactiques_cumules": 0 });
       }
     });
-  });  
+  });
 });
 
 Hooks.on("createItem", (item) => {
-  if (!item || item.type !== "handicap" || item.type !== "armure" || item.type !== "arme" || item.type !== "consommable" || item.type !== "equipement") return;
-
-  console.log(`➕ Ajouté : ${item.name} (${item.id})`);
+  if (!item || !["handicap", "armure", "arme", "consommable", "equipement"].includes(item.type)) return;
+  game.i18n.format('system.attributes.ajout_item', { item_name: item.name, item_id: item.id })
   item.parent.sheet.render(); // Recharge la fiche de l'acteur
 });
 
 Hooks.on("updateItem", (item) => {
-  if (!item || item.type !== "handicap" || item.type !== "armure" || item.type !== "arme" || item.type !== "consommable" || item.type !== "equipement") return;
-
-  console.log(`♻️ Mise à jour : ${item.name} (${item.id})`);
+  if (!item || !["handicap", "armure", "arme", "consommable", "equipement"].includes(item.type)) return;
+  game.i18n.format('system.attributes.mise_a_jour_item', { item_name: item.name, item_id: item.id })
   item.parent.sheet.render();
 });
 
 Hooks.on("deleteItem", (item) => {
-  if (!item || item.type !== "handicap" || item.type !== "armure" || item.type !== "arme" || item.type !== "consommable" || item.type !== "equipement") return;
-
-  console.log(`❌ Supprimé : ${item.name} (${item.id})`);
+  if (!item || !["handicap", "armure", "arme", "consommable", "equipement"].includes(item.type)) return;
+  game.i18n.format('system.attributes.suppression_item', { item_name: item.name, item_id: item.id })
   item.parent.sheet.render();
 });
 
@@ -248,28 +243,24 @@ Hooks.on("updateActor", (actor, updates) => {
 
       try {
         token.document.update(tokenData);
-        console.log("Token mis à jour avec succès !");
+        console.log(game.i18n.localize(`system.attributes.maj_token_succes`));
       } catch (error) {
-        console.error("Erreur lors de la mise à jour du token : ", error);
+        console.error(game.i18n.format('system.attributes.maj_token_erreur', { error: error }));
       }
     } else {
-      console.warn("Aucun token actif trouvé pour cet acteur.");
+      console.warn(game.i18n.localize(`system.attributes.aucun_token_trouve`));
     }
   } else {
-    console.log("Pas de changement détecté sur le nom");
+    console.log(game.i18n.localize(`system.attributes.maj_nom_non_detecte`));
   }
 
   if (updates.hasOwnProperty("texture") && updates.texture.hasOwnProperty("src")) {
     const actor = token.actor;
     if (!actor) return;
-
-    console.log("[DEBUG] Mise à jour de l'image du token détectée :", updates.texture.src);
-
     try {
-        actor.update({ "img": updates.texture.src });
-        console.log("[DEBUG] Image de l'acteur mise à jour avec succès !");
+      actor.update({ "img": updates.texture.src });
     } catch (error) {
-        console.error("[ERREUR] Impossible de mettre à jour l'image de l'acteur :", error);
+      console.error(game.i18n.format('system.attributes.maj_image_erreur', { error: error }));
     }
-}
+  }
 });

@@ -2,8 +2,8 @@
   "id": "pep",
   "name": "pep",
   "title": "Pep",
-  "description": "The Pep system for FoundryVTT!",
-  "version": "0.1.5",
+  "description": "The Pep system for Foundry",
+  "version": "1.0.0",
   "compatibility": {
     "minimum": "10",
     "verified": "12"
@@ -12,8 +12,7 @@
     {
       "name": "Clement Jumeline",
       "email": "cjumeline@tutanota.com",
-      "discord": "Clemodd",
-      "url": "https://discord.gg/TS8A5CAypd"
+      "discord": "Clemodd"
     }
   ],
   "esmodules": [
@@ -78,6 +77,7 @@
     "distance": 1,
     "units": "m"
   },
-  "url": "TODO",
+  "url": "https://github.com/Clemodd/pep-system",
+  "manifest": "https://raw.githubusercontent.com/Clemodd/pep-system/main/system.json",
   "download": "TODO"
 }

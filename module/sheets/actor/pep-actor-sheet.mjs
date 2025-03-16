@@ -32,10 +32,6 @@ export class PepActorSheet extends ActorSheet {
     context.system.handicaps = this.actor.items.filter(i => i.type === "handicap"); // Pour drag and drop les handicaps
     context.system.equipements = this.actor.items.filter(i => ["armure", "arme", "consommable", "equipement"].includes(i.type)); // Pour drag and drop les équipements
 
-    context.effects = prepareActiveEffectCategories( // Récupère tous les effets (buffs, debuffs, conditions)
-      this.actor.allApplicableEffects()
-    );
-
     return context;
   }
 
@@ -104,7 +100,7 @@ export class PepActorSheet extends ActorSheet {
     });
 
     // Supprimer un equipement de la liste
-    html.find("#delete-equipement").on("click", async (event) => {
+    html.find(".delete-equipement").on("click", async (event) => {
       const itemId = event.currentTarget.dataset.itemId;
       const item = this.actor.items.get(itemId);
 
@@ -112,6 +108,11 @@ export class PepActorSheet extends ActorSheet {
 
       // Si c'était de type "armure", on recalcule la valeur totale
       this.UpdateArmure(item);
+
+      ChatMessage.create({
+        content: game.i18n.format('system.actorSheet.chat_message_item_deleted', { item_name: item.name, actor_name: this.actor.name }),
+        type: CONST.CHAT_MESSAGE_STYLES.OTHER
+      });
     });
   }
 
@@ -152,9 +153,15 @@ export class PepActorSheet extends ActorSheet {
     });
 
     // Supprimer un handicap de la liste
-    html.find("#delete-handicap").on("click", async (event) => {
+    html.find(".delete-handicap").on("click", async (event) => {
       const itemId = event.currentTarget.dataset.itemId;
+      const item = this.actor.items.get(itemId);
       await this.actor.deleteEmbeddedDocuments("Item", [itemId]);
+
+      ChatMessage.create({
+        content: game.i18n.format('system.actorSheet.chat_message_handicap_removed', { item_name: item.name, actor_name: this.actor.name }),
+        type: CONST.CHAT_MESSAGE_STYLES.OTHER
+      });
     });
   }
 
@@ -180,9 +187,8 @@ export class PepActorSheet extends ActorSheet {
     let data;
     try {
       data = JSON.parse(evt.dataTransfer.getData("text/plain"));
-      console.log("PEP | Données de l'item reçu :", data);
     } catch (err) {
-      console.error("PEP | Impossible de récupérer les données de l'item", err);
+      console.error(t("error_cannot_retrieve_item", { error: err }));
       return;
     }
 
@@ -197,8 +203,8 @@ export class PepActorSheet extends ActorSheet {
 
     // Vérifie si l'item est bien de type "handicap"
     if (data.type !== "handicap") {
-      console.warn("PEP | Type d'item non valide après correction :", data.type);
-      ui.notifications.warn("Seuls les items de type 'Handicap' peuvent être ajoutés ici !");
+      ui.notifications.warn(game.i18n.localize(`system.actorSheet.warning_handicap_item`)
+      );
       return;
     }
 
@@ -208,10 +214,10 @@ export class PepActorSheet extends ActorSheet {
     if (game.combat) {
       await createdItems[0].update({ "system.acquisition_tour": game.combat.round });
     }
-    ui.notifications.info(`${data.name} ajouté au personnage ${this.actor.name} !`);
+    ui.notifications.info(game.i18n.format('system.actorSheet.info_ajout_data', { data_name: data.name, actor_name: this.actor.name }));
 
     ChatMessage.create({
-      content: `<b>${this.actor.name}</b> est <b>${data.name}</b> pendant <b>${data.system.duree} tour${data.system.duree > 1 ? "s" : ""}</b>.`,
+      content: game.i18n.format('system.actorSheet.chat_message_item_equipped', { actor_name: this.actor.name, item_name: data.name, duration: data.system.duree, s: data.system.duree > 1 ? "s" : "" }),
       type: CONST.CHAT_MESSAGE_STYLES.OTHER
     });
   }
@@ -222,9 +228,8 @@ export class PepActorSheet extends ActorSheet {
     let data;
     try {
       data = JSON.parse(evt.dataTransfer.getData("text/plain"));
-      console.log("PEP | Données de l'item reçu :", data);
     } catch (err) {
-      console.error("PEP | Impossible de récupérer les données de l'item", err);
+      console.error(t("error_cannot_retrieve_item", { error: err }));
       return;
     }
 
@@ -244,7 +249,7 @@ export class PepActorSheet extends ActorSheet {
     const totalEmplacementsPris = emplacementsUtilisesAvant + quantiteAjoutee;
 
     if (totalEmplacementsPris > limiteEmplacements) {
-      ui.notifications.warn("Tu as atteint la limite d'emplacements pour les équipements !");
+      ui.notifications.warn(game.i18n.localize(`system.actorSheet.error_item_limit_reached`));
       return;
     }
 
@@ -257,8 +262,7 @@ export class PepActorSheet extends ActorSheet {
 
     // Vérifie si l'item est bien de type "handicap"
     if (data.type !== "armure" && data.type !== "consommable" && data.type !== "arme" && data.type !== "equipement") {
-      console.warn("PEP | Type d'item non valide après correction :", data.type);
-      ui.notifications.warn("Seuls les items de type 'Equipement' peuvent être ajoutés ici !");
+      ui.notifications.warn(game.i18n.localize(`system.actorSheet.warning_equipement_item`));
       return;
     }
 
@@ -271,10 +275,10 @@ export class PepActorSheet extends ActorSheet {
     // Puis on recalcule l'armure totale
     this.UpdateArmure(item);
 
-    ui.notifications.info(`${data.name} ajouté au personnage ${this.actor.name} !`);
+    ui.notifications.info(game.i18n.format('system.actorSheet.info_ajout_data', { data_name: data.name, actor_name: this.actor.name }));
 
     ChatMessage.create({
-      content: `<b>${data.name}</b> est dans le sac de <b>${this.actor.name}</b>.`,
+      content: game.i18n.format('system.actorSheet.chat_message_item_in_bag', { actor_name: this.actor.name, item_name: data.name }),
       type: CONST.CHAT_MESSAGE_STYLES.OTHER
     });
   }
@@ -288,53 +292,36 @@ export class PepActorSheet extends ActorSheet {
     };
 
     if (handicapsActifs.length === 0) {
-      console.log(`✅ ${this.actor.name} n'a aucun handicap.`);
       return resultats;
     }
 
     handicapsActifs.forEach(handicap => {
-      console.log(`🛑 Handicap : ${handicap.name}`);
-      console.log(`🔹 Durée : ${handicap.system.duree} tours`);
-
       const modCompetencesGlobales = handicap.system.modificateurs.competences_globales?.value ?? 0;
       const conditionCombat = handicap.system.modificateurs.condition_combat?.value ?? false;
       const peutTirer = handicap.system.modificateurs.peut_tirer?.value ?? true;
       const peutEsquiver = handicap.system.modificateurs.peut_esquiver?.value ?? true;
 
       if (modCompetencesGlobales !== 0) {
-        console.log(`⚠️ Il y a un malus global (-${modCompetencesGlobales})`);
-
         if (conditionCombat) {
-          console.log(`⚠️ Le malus s'applique en combat`);
-
           if (!game.combat) {
-            console.log("🔸 Pas de combat, malus non appliqué");
             return;
           }
         }
-
-        console.log("🔹 Malus appliqué");
         resultats.malus_global += modCompetencesGlobales;
       }
 
       if (!peutTirer) {
-        console.log(`🚫 ${handicap.name} bloque l'utilisation des tirs.`);
         if (conditionCombat) {
-          console.log("⚔️ Interdiction de tirer active uniquement en combat");
           resultats.peutTirer = game.combat ? false : true; // Permet de tirer hors combat
         } else {
-          console.log("🚫 Interdiction de tirer sans condition");
           resultats.peutTirer = false;
         }
       }
 
       if (!peutEsquiver) {
-        console.log(`🚫 ${handicap.name} bloque l'utilisation des esquives.`);
         if (conditionCombat) {
-          console.log("⚔️ Interdiction d'esquiver en combat");
-          resultats.peutEsquiver = game.combat ? false : true; // Permet de tirer hors combat
+          resultats.peutEsquiver = game.combat ? false : true; // Permet d'esquiver hors combat
         } else {
-          console.log("🚫 Interdiction d'esquiver sans condition");
           resultats.peutEsquiver = false;
         }
       }
@@ -376,11 +363,7 @@ export class PepActorSheet extends ActorSheet {
 
       roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: `Jet d'usage ${jetAvant} pour l'objet ${type}.
-                 <br>
-                 <b>Résultat</b> : ${resultat}
-                 ${isSupprime ? "<br>L'objet est épuisé" : ""}
-                 `
+        flavor: game.i18n.format('system.actorSheet.log_rolling_usage', { old_die: jetAvant, type: type, result: resultat, isSupprime: isSupprime ? game.i18n.localize(`system.actorSheet.error_out_of_uses`) : "" }),
       });
     });
   }
@@ -398,9 +381,9 @@ export class PepActorSheet extends ActorSheet {
 
       let messageHandicaps = "";
       if (handicapsActifs.length > 0) {
-        messageHandicaps += `<br><b>⚠️ Handicaps actifs :</b>`;
+        messageHandicaps += game.i18n.localize(`system.actorSheet.message_handicap_titre`);
         handicapsActifs.forEach(handicap => {
-          messageHandicaps += `<br> - <b>${handicap.name}</b> (${handicap.system.duree} tour${handicap.system.duree > 1 ? "s" : ""}) : ${handicap.system.description}`;
+          messageHandicaps += game.i18n.format('system.actorSheet.message_handicap', { name: handicap.name, duree: handicap.system.duree, s: handicap.system.duree > 1 ? "s" : "", description: handicap.system.description });
         });
       }
 
@@ -410,10 +393,10 @@ export class PepActorSheet extends ActorSheet {
         });
         return;
       } else if (key === "tir" && !analyseHandicaps.peutTirer) {
-        ui.notifications.error(`${this.actor.name} ne peut pas tirer à cause d'un handicap.`);
+        ui.notifications.error(game.i18n.format('system.actorSheet.error_cannot_shoot', { actor_name: this.actor.name }));
         return;
       } else if (key === "esquive" && !analyseHandicaps.peutEsquiver) {
-        ui.notifications.error(`${this.actor.name} ne peut pas esquiver à cause d'un handicap.`);
+        ui.notifications.error(game.i18n.format('system.actorSheet.error_cannot_dodge', { actor_name: this.actor.name }));
         return;
       } else if (key === "vitalite" || key === "mobilite") {
         return;
@@ -441,13 +424,19 @@ export class PepActorSheet extends ActorSheet {
 
       roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: `Jet de ${nombreDe} dé${nombreDe > 1 ? "s" : ""} pour le test <b>${game.i18n.localize(`system.attributes.${key}`)}</b>. ${analyseHandicaps.malus_global != 0 ? `(Malus de -${analyseHandicaps.malus_global})` : ""}
-                 <br>
-                 <b>Détails du jet</b> : <br>
-                 ✅ <b>Succès</b> : ${nbSucces} <br>
-                 ⚔️ <b>Tactiques</b> : ${nbTactique} <br>
-                 💀 <b>Crânes</b> : ${nbCrane}
-                  ${messageHandicaps}` // 🔹 Ajout des handicaps actifs
+        flavor: game.i18n.format('system.actorSheet.chat_message_rolled_dice',
+          {
+            nombreDe: nombreDe,
+            s: nombreDe > 1 ? "s" : "",
+            test: game.i18n.localize(`system.attributes.${key}`),
+            malus: analyseHandicaps.malus_global != 0 ? game.i18n.format('system.actorSheet.malus_of',
+              { malus: analyseHandicaps.malus_global }) : "",
+            nbSucces: nbSucces,
+            nbTactique: nbTactique,
+            nbCrane: nbCrane,
+            messageHandicaps: messageHandicaps
+          }
+        )
       });
 
       if (game.combat !== null) {
@@ -465,7 +454,6 @@ export class PepActorSheet extends ActorSheet {
       const min = Number(input.getAttribute('min'));
       const max = Number(input.getAttribute('max'));
       const value = Number(input.value);
-      console.log(`Saisie: ${value} | Min autorisé: ${min} | Max autorisé: ${max}`);
 
       // Applique les limites min/max
       if (input.value !== "") {
@@ -474,7 +462,7 @@ export class PepActorSheet extends ActorSheet {
 
         ChatMessage.create({
           speaker: ChatMessage.getSpeaker({ actor }),
-          content: `<b>${actor.name}</b> a modifié <b>${key}</b> à <b>${value}</b>.`,
+          content: game.i18n.format('system.actorSheet.chat_message_input_edited', { actor_name: actor.name, key: key, value: value })
         });
       }
     });
@@ -544,11 +532,14 @@ export class PepActorSheet extends ActorSheet {
       // Affiche le résultat dans le chat
       roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: `Jet de ${diceFormula} 🎲<br>
-        Vigueur : ${resultat[0]}<br>
-        Agilité : ${resultat[1]}<br>
-        Sensibilité : ${resultat[2]}<br>
-        Esprit : ${resultat[3]}`
+        flavor: game.i18n.format('system.actorSheet.chat_message_init_roll',
+          {
+            de: diceFormula,
+            vigueur: resultat[0],
+            agilite: resultat[1],
+            sensibilite: resultat[2],
+            esprit: resultat[3]
+          })
       });
     });
   }
@@ -557,7 +548,7 @@ export class PepActorSheet extends ActorSheet {
     html.find('#jet-risque').on('click', async (event) => {
       event.preventDefault();
 
-      let roll = new Roll("1df");
+      let roll = new Roll(`1${CONFIG.PEP.JET_DE_FATE}`);
       await roll.evaluate();
 
       const resultat = roll.dice[0].results.map(r => r.result);
@@ -568,11 +559,11 @@ export class PepActorSheet extends ActorSheet {
       // Affiche le résultat dans le chat
       roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: `Jet de <b>risque<b> 🎲<br>
-        
-        <b>Détails du jet</b> : <br>
-        ✅ <b>Succès</b> : ${nbSucces} <br>
-        💀 <b>Crânes</b> : ${nbCrane}`
+        flavor: game.i18n.format('system.actorSheet.chat_message_risk_roll',
+          {
+            nbSucces: nbSucces,
+            nbCrane: nbCrane
+          })
       });
     });
   }
@@ -613,7 +604,6 @@ export class PepActorSheet extends ActorSheet {
         malus_mobilite
       );
     } else {
-      console.log("🚷 Un handicap bloque la mobilité, mise à 0.");
       html.find(`input[name="system.caracteristique_secondaire.mobilite.value"]`).val(0);
     }
   }
@@ -685,7 +675,7 @@ export class PepActorSheet extends ActorSheet {
 
         ChatMessage.create({
           speaker: ChatMessage.getSpeaker({ actor }),
-          content: `<b>${actor.name}</b> a ajouté <b>${tactiqueBonus}</b> tactiques à <b>${arme.name}</b>.`
+          content: game.i18n.format('system.actorSheet.chat_message_tactiques_added', { actor_name: actor.name, tactique_bonus: tactiqueBonus, item_name: arme.name })
         });
       }
     });
@@ -699,7 +689,7 @@ export class PepActorSheet extends ActorSheet {
         .some(handicap => handicap.system.modificateurs?.peut_utiliser_tactiques?.value === false) && game.combat !== null;
 
       if (isTalentArmeBloque) {
-        ui.notifications.warn("Vous êtes désarmés et ne pouvez pas utiliser de talents d'armes.");
+        ui.notifications.warn(game.i18n.localize(`system.actorSheet.error_tactique_disabled`));
         return;
       }
       const actor = this.actor;
@@ -719,37 +709,3 @@ function convertirValeur(resultat) {
   if (resultat === 12) return 4;
   return 0; // Sécurité si jamais un résultat non attendu arrive
 }
-
-/**
- * Classe les effets actifs en catégories (Temporaire, Passif, Inactif)
- * @param {Array} effects - Liste des effets actifs
- * @returns {Object} Catégories triées des effets
- */
-function prepareActiveEffectCategories(effects) {
-  const categories = {
-    temporary: {
-      type: 'temporary',
-      label: game.i18n.localize('PEP.Effect.Temporary'),
-      effects: [],
-    },
-    passive: {
-      type: 'passive',
-      label: game.i18n.localize('PEP.Effect.Passive'),
-      effects: [],
-    },
-    inactive: {
-      type: 'inactive',
-      label: game.i18n.localize('PEP.Effect.Inactive'),
-      effects: [],
-    },
-  };
-
-  // Tri des effets dans les bonnes catégories
-  for (let e of effects) {
-    if (e.disabled) categories.inactive.effects.push(e);
-    else if (e.isTemporary) categories.temporary.effects.push(e);
-    else categories.passive.effects.push(e);
-  }
-
-  return categories;
-}  
